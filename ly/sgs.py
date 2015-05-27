@@ -5,7 +5,7 @@ import urllib
 import urllib2
 import cookielib
 import re
-import bs4
+
 
 class SGS:
     def __init__(self):
