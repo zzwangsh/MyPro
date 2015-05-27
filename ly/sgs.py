@@ -12,23 +12,17 @@ class SGS:
         self.loginUrl = 'http://www.sgs.gov.cn/lz/etpsInfo.do?method=doSearch'
         self.gradeUrl = 'http://www.sgs.gov.cn/lz/etpsInfo.do?method=viewDetail'
         self.cookies = cookielib.CookieJar()  
+        self.httpHandler = urllib2.HTTPHandler(debuglevel=1)
         self.postdata = urllib.urlencode({
             'searchType':'1',
             'keyWords':'上海来伊份电子商务有限公司'
           })
-        self.headers = {
-            'Host':'www.sgs.gov.cn',
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Connection' : 'Keep-Alive',
-            'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:35.0) Gecko/20100101 Firefox/35.0',
-        }
         self.opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self.cookies))
 
     def getPage(self):
         request = urllib2.Request(
             url = self.loginUrl,
-            data = self.postdata,
-            headers = self.headers)
+            data = self.postdata)
         result = self.opener.open(request)
         contents = result.read()
         return contents
@@ -44,22 +38,21 @@ class SGS:
             print "Not Found"
 
     def getResult(self):
-        postid = self.getEspsid()
+        postid = int(self.getEspsid())
         newpostdata = urllib.urlencode({'espId':postid})
-        newheaders = {
-            'Host':'www.sgs.gov.cn',
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Connection' : 'Keep-Alive',
-            'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:35.0) Gecko/20100101 Firefox/35.0',
-            'Referer':'http://www.sgs.gov.cn/lz/etpsInfo.do?method=doSearch'
+        
+        headers = {
+            'Referer':'http://www.sgs.gov.cn/lz/etpsInfo.do?method=doSearch',
+            'Cache-Control':'max-age=0'
         }    
-        print newheaders
-        newRequest = urllib2.Request(url=self.gradeUrl,data=newpostdata,headers=newheaders)
+        print headers
+        newRequest = urllib2.Request(url=self.gradeUrl,data=newpostdata,headers=headers)
         #    url = self.gradeUrl,
         #   data = newpostdata)
         result = self.opener.open(newRequest)
         contents = result.read()
         print contents
+
         
 
                
