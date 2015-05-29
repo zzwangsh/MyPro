@@ -3,4 +3,3 @@ small tools
 * Python 
 * shell
 * other
-* ...
